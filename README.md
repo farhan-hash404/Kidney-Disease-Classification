@@ -1,34 +1,50 @@
-# Kidney Disease Classification — Deep Learning MLOps Project
+# Kidney Disease Classification AI System (VGG16 + FastAPI + React)
 
-An end-to-end deep learning project that classifies kidney CT scan images as **Normal** or **Tumor**, built with a production-grade MLOps pipeline from data ingestion to cloud deployment.
+An end-to-end deep learning medical imaging project that classifies kidney CT scan images into **Normal**, **Kidney Tumor**, **Cyst**, and **Kidney Stone** findings. Built with a production-ready FastAPI backend, PostgreSQL/SQLite database persistence, VGG16 CNN inference service, and a high-performance Vite React UI.
 
-##  Problem Statement
-Kidney tumors are abnormal growths that can occur unexpectedly and may be benign or cancerous. This project uses a CNN-based image classifier (VGG16 transfer learning) to automatically classify kidney CT scan images, assisting in early detection workflows.
+---
 
-##  Key Features
-- **Modular architecture** — config-driven design using entity/config/components/pipeline structure for maintainability and reusability
-- **Transfer learning** — fine-tuned VGG16 (pretrained on ImageNet) with custom classification head
-- **Experiment tracking** — MLflow integration (via DagsHub) for logging parameters, metrics, and model versioning/registry
-- **Pipeline versioning** — DVC (Data Version Control) to track pipeline stages and avoid redundant re-execution
-- **Data ingestion** — automated data download from Google Drive
-- **Web application** — Flask-based UI for training and real-time prediction
-- **Containerization** — Dockerized application for consistent deployment
-- **CI/CD** — automated build, push, and deployment pipeline using GitHub Actions with a self-hosted EC2 runner, deployed to AWS (ECR + EC2)
+## 🚀 How to Run the Application
 
-##  Tech Stack
-`Python` `TensorFlow/Keras` `MLflow` `DVC` `Flask` `Docker` `GitHub Actions` `AWS (ECR, EC2, IAM)` `DagsHub`
+You can launch both the **FastAPI Backend** and **React Frontend** with a single command:
 
-##  Project Structure
-- `src/` — modular source code (components, config, entity, pipeline, utils)
-- `config/` — configuration YAML files
-- `params.yaml` — model hyperparameters
-- `dvc.yaml` — DVC pipeline definition
-- `Dockerfile` — container build spec
-- `.github/workflows/` — CI/CD pipeline definitions
-- `app.py` — Flask application entry point
+```bash
+python run_all.py
+```
 
-##  Workflow
-1. Data Ingestion → 2. Base Model Preparation → 3. Model Training → 4. Model Evaluation (with MLflow logging) → 5. Deployment
+- **React Frontend UI:** [http://localhost:3000](http://localhost:3000)
+- **FastAPI API Documentation (Swagger):** [http://localhost:8000/docs](http://localhost:8000/docs)
+- **Backend Health Check:** [http://localhost:8000/api/v1/health](http://localhost:8000/api/v1/health)
 
-## 🔗 Live Demo / Deployment
-Deployed on AWS EC2 using Docker containers pulled from Amazon ECR, with automated CI/CD triggered on every push to `main`.
+---
+
+## 🛠️ Individual Server Commands
+
+### 1. FastAPI Backend:
+```bash
+cd backend
+pip install -r requirements.txt
+python -m uvicorn main:app --reload --port 8000
+```
+
+### 2. React Frontend (Vite + TypeScript + Tailwind CSS):
+```bash
+cd frontend
+npm install
+npm run dev
+```
+
+### 3. Build Production Bundle:
+```bash
+cd frontend
+npm run build
+```
+
+---
+
+## 🔬 Core Features & Architecture
+
+1. **Classification Studio:** Drag-and-drop CT scan upload interface with real-time scan line visualizer, sample scan presets (Normal, Tumor, Stone, Cyst), and instant diagnostic breakdown.
+2. **Prediction History Database:** Automatically persists diagnosis records, confidence scores, raw scan images, and clinical notes to PostgreSQL / SQLite database with filtering and search capabilities.
+3. **Clinical Analytics Dashboard:** Real-time statistics, average model confidence tracking, scan distribution ratios, and diagnostic trends.
+4. **Resilient AI Service:** Intelligent fallback inference engine if the trained H5 model file is not present during testing.

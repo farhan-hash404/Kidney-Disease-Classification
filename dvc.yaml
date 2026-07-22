@@ -1,0 +1,47 @@
+stages:
+  data_ingestion:
+    cmd: python research/data_ingestion.py
+    deps:
+      - config/config.yaml
+    outs:
+      - artifacts/data_ingestion
+
+  prepare_base_model:
+    cmd: python research/prepare_base_model.py
+    deps:
+      - config/config.yaml
+    params:
+      - IMAGE_SIZE
+      - INCLUDE_TOP
+      - WEIGHTS
+      - CLASSES
+      - LEARNING_RATE
+    outs:
+      - artifacts/prepare_base_model
+
+  training:
+    cmd: python research/model_training.py
+    deps:
+      - config/config.yaml
+      - artifacts/data_ingestion
+      - artifacts/prepare_base_model
+    params:
+      - IMAGE_SIZE
+      - EPOCHS
+      - BATCH_SIZE
+      - AUGMENTATION
+    outs:
+      - artifacts/training
+
+  evaluation:
+    cmd: python research/model_evaluation_with_mlflow.py
+    deps:
+      - config/config.yaml
+      - artifacts/data_ingestion
+      - artifacts/training
+    params:
+      - IMAGE_SIZE
+      - BATCH_SIZE
+    metrics:
+      - scores.json:
+          cache: false
